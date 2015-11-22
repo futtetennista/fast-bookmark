@@ -1,8 +1,8 @@
-package playground.copytoshare
+package copytoshare
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.os.Bundle
-import android.preference.PreferenceActivity
 import android.support.annotation.LayoutRes
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatDelegate
@@ -15,7 +15,7 @@ import android.view.ViewGroup
  * A [android.preference.PreferenceActivity] which implements and proxies the necessary calls
  * to be used with AppCompat.
  */
-abstract class AppCompatPreferenceActivity : PreferenceActivity() {
+abstract class AppCompatActivity : Activity() {
 
   private var mDelegate: AppCompatDelegate? = null
 

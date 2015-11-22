@@ -1,41 +1,49 @@
-package playground.copytoshare
+package copytoshare
 
 
-import android.annotation.TargetApi
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
-import android.media.Ringtone
-import android.media.RingtoneManager
-import android.net.Uri
-import android.os.Build
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.os.Bundle
 import android.preference.ListPreference
 import android.preference.Preference
-import android.preference.PreferenceActivity
-import android.support.v7.app.ActionBar
 import android.preference.PreferenceFragment
-import android.preference.PreferenceManager
-import android.preference.RingtonePreference
-import android.text.TextUtils
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ImageSpan
+import android.text.style.StyleSpan
 import android.view.MenuItem
+import playground.copytoshare.R
+import javax.inject.Inject
 
-/**
- * A [PreferenceActivity] that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- *
- *
- * See [
-   * Android Design: Settings](http://developer.android.com/design/patterns/settings.html) for design guidelines and the [Settings
-   * API Guide](http://developer.android.com/guide/topics/ui/settings.html) for more information on developing a Settings UI.
- */
-class SettingsActivity : AppCompatPreferenceActivity() {
+class SettingsActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setupActionBar()
+
+    if (savedInstanceState == null) {
+      fragmentManager
+          .beginTransaction()
+          .add(android.R.id.content, GeneralPreferenceFragment())
+          .commit()
+    }
+    //    val flags = Intent::class.java.fields.filter { f ->
+    //      f.name.startsWith("FLAG_")
+    //    }.map { f ->
+    //      Pair(f.name, f.getInt(intent))
+    //    }
+    //    val setFlagNames = flags.filter { pair ->
+    //      (intent.flags and(1 shl(pair.second))) != 0
+    //    }.map { pair ->
+    //      pair.first
+    //    }
+    //    Log.i("INTENT FLAGS COUNT", setFlagNames.size.toString())
+    //    for (name in setFlagNames)
+    //      Log.i("INTENT FLAG SET", name)
   }
 
   /**
@@ -43,198 +51,116 @@ class SettingsActivity : AppCompatPreferenceActivity() {
    */
   private fun setupActionBar() {
     val actionBar = supportActionBar
-    actionBar?.setDisplayHomeAsUpEnabled(true)
-  }
-
-
-  /**
-   * {@inheritDoc}
-   */
-  override fun onIsMultiPane(): Boolean {
-    return isXLargeTablet(this)
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-  override fun onBuildHeaders(target: List<PreferenceActivity.Header>) {
-    loadHeadersFromResource(R.xml.pref_headers, target)
-  }
-
-  /**
-   * This method stops fragment injection in malicious applications.
-   * Make sure to deny any unknown fragments here.
-   */
-  override fun isValidFragment(fragmentName: String): Boolean {
-    return PreferenceFragment::class.java!!.getName() == fragmentName
-        || GeneralPreferenceFragment::class.java!!.getName() == fragmentName
-        || DataSyncPreferenceFragment::class.java!!.getName() == fragmentName
-        || NotificationPreferenceFragment::class.java!!.getName() == fragmentName
+    actionBar.setDisplayHomeAsUpEnabled(true)
   }
 
   /**
    * This fragment shows general preferences only. It is used when the
    * activity is showing a two-pane settings UI.
    */
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   class GeneralPreferenceFragment : PreferenceFragment() {
+
+    @Inject lateinit var preferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
+      CopyToShareApplication.objectGraph.inject(this)
       addPreferencesFromResource(R.xml.pref_general)
       setHasOptionsMenu(true)
 
-      // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-      // to their values. When their values change, their summaries are
-      // updated to reflect the new value, per the Android Design
-      // guidelines.
-      bindPreferenceSummaryToValue(findPreference("example_text"))
-      bindPreferenceSummaryToValue(findPreference("example_list"))
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-      val id = item.itemId
-      if (id == android.R.id.home) {
-        startActivity(Intent(activity, SettingsActivity::class.java))
-        return true
-      }
-      return super.onOptionsItemSelected(item)
-    }
-  }
-
-  /**
-   * This fragment shows notification preferences only. It is used when the
-   * activity is showing a two-pane settings UI.
-   */
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-  class NotificationPreferenceFragment : PreferenceFragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-      super.onCreate(savedInstanceState)
-      addPreferencesFromResource(R.xml.pref_notification)
-      setHasOptionsMenu(true)
-
-      // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-      // to their values. When their values change, their summaries are
-      // updated to reflect the new value, per the Android Design
-      // guidelines.
-      bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"))
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-      val id = item.itemId
-      if (id == android.R.id.home) {
-        startActivity(Intent(activity, SettingsActivity::class.java))
-        return true
-      }
-      return super.onOptionsItemSelected(item)
-    }
-  }
-
-  /**
-   * This fragment shows data and sync preferences only. It is used when the
-   * activity is showing a two-pane settings UI.
-   */
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-  class DataSyncPreferenceFragment : PreferenceFragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-      super.onCreate(savedInstanceState)
-      addPreferencesFromResource(R.xml.pref_data_sync)
-      setHasOptionsMenu(true)
-
-      // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-      // to their values. When their values change, their summaries are
-      // updated to reflect the new value, per the Android Design
-      // guidelines.
-      bindPreferenceSummaryToValue(findPreference("sync_frequency"))
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-      val id = item.itemId
-      if (id == android.R.id.home) {
-        startActivity(Intent(activity, SettingsActivity::class.java))
-        return true
-      }
-      return super.onOptionsItemSelected(item)
-    }
-  }
-
-  companion object {
-
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
-    private fun isXLargeTablet(context: Context): Boolean {
-      return (context.resources.configuration.screenLayout
-          and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE
-    }
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private val sBindPreferenceSummaryToValueListener =
-        Preference.OnPreferenceChangeListener { preference, value ->
-          val stringValue = value.toString()
-
-          if (preference is ListPreference) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list.
-            val index = preference.findIndexOfValue(stringValue)
-
-            // Set the summary to reflect the new value.
-            preference.summary = if (index >= 0)
-              preference.entries[index]
-            else
-              null
-
-          } else if (preference is RingtonePreference) {
-            // For ringtone preferences, look up the correct display value
-            // using RingtoneManager.
-            if (TextUtils.isEmpty(stringValue)) {
-              // Empty values correspond to 'silent' (no ringtone).
-              preference.setSummary(R.string.pref_ringtone_silent)
-
-            } else {
-              val ringtone = RingtoneManager.getRingtone(
-                  preference.context, Uri.parse(stringValue))
-
-              if (ringtone == null) {
-                // Clear the summary if there was a lookup error.
-                preference.summary = null
-              } else {
-                // Set the summary to reflect the new ringtone display
-                // name.
-                val name = ringtone.getTitle(preference.context)
-                preference.summary = name
+      //      bindPreferenceSummaryToValue(findPreference("pref_enable"))
+      findPreference("pref_switch_enable").onPreferenceChangeListener =
+          Preference.OnPreferenceChangeListener { pref, newValue ->
+            when (newValue as Boolean) {
+              true -> {
+                setComponentsEnableState(PackageManager.COMPONENT_ENABLED_STATE_ENABLED)
+                CopyToShareService.start(context)
+              }
+              false -> {
+                CopyToShareService.stop(context)
+                setComponentsEnableState(PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
               }
             }
-
-          } else {
-            // For all other preferences, set the summary to the value's
-            // simple string representation.
-            preference.summary = stringValue
+            preferences.edit().putBoolean("enabled", newValue).apply()
+            false
           }
-          true
+      val defaultAppPreference = findPreference("pref_list_apps") as ListPreference
+      defaultAppPreference.onPreferenceChangeListener =
+          Preference.OnPreferenceChangeListener { pref, newSharingActivityName ->
+            var sharingActivityPackageName =
+                retrieveSharingActivityPackageName(context, newSharingActivityName as String)
+            preferences.edit()
+                .putString("sharing_activity_package", sharingActivityPackageName)
+                .putString("sharing_activity_name", newSharingActivityName)
+                .apply()
+            false
+          }
+      val sharingAppsNamesData = retrieveSharingAppsData(activity)
+      if (sharingAppsNamesData.first != null) {
+        defaultAppPreference.setDefaultValue(sharingAppsNamesData.first)
+      }
+      defaultAppPreference.entries = sharingAppsNamesData.second
+    }
+
+    private fun setComponentsEnableState(enabledState: Int) {
+      context.packageManager.setComponentEnabledSetting(
+          ComponentName.createRelative(context, CopyToShareService::class.java.name),
+          enabledState,
+          0
+      )
+      context.packageManager.setComponentEnabledSetting(
+          ComponentName.createRelative(context, BootBroadcastReceiver::class.java.name),
+          enabledState,
+          0
+      )
+    }
+
+    private fun retrieveSharingActivityPackageName(context: Context,
+                                                   newSharingActivityName: String):
+        String? {
+      val intent = Intent(Intent.ACTION_SEND).setType("text/plain")
+      val packageNames =
+          context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+              .filter { it.activityInfo.name == newSharingActivityName }
+              .map { it.activityInfo.packageName }
+      return if (packageNames.isNotEmpty()) {
+        packageNames.first()
+      } else {
+        null
+      }
+    }
+
+    private fun retrieveSharingAppsData(context: Context): Pair<Int?, Array<out CharSequence>> {
+      val intent = Intent(Intent.ACTION_SEND).setType("text/plain")
+      val activities =
+          context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+      var defaultAppIndex: Int? = null
+      val names = activities.mapIndexed { i, resolveInfo ->
+        val activityInfo = resolveInfo.activityInfo
+        val entry = SpannableString(activityInfo.applicationInfo.name)
+        if (activityInfo.name == defaultShareActivityName()) {
+          entry.setSpan(StyleSpan(Typeface.BOLD), 0, entry.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          defaultAppIndex = i
         }
+        entry.setSpan(ImageSpan(context, activityInfo.applicationInfo.icon), 0, 1,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        entry
+      }.toTypedArray()
 
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
+      return Pair(defaultAppIndex, names)
+    }
 
-     * @see .sBindPreferenceSummaryToValueListener
-     */
-    private fun bindPreferenceSummaryToValue(preference: Preference) {
-      // Set the listener to watch for value changes.
-      preference.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
+    private fun defaultShareActivityName(): String? {
+      return null
+    }
 
-      // Trigger the listener immediately with the preference's
-      // current value.
-      sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceManager
-          .getDefaultSharedPreferences(preference.context).getString(preference.key, ""))
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+      val id = item.itemId
+      if (id == android.R.id.home) {
+        startActivity(Intent(activity, SettingsActivity::class.java))
+        return true
+      }
+      return super.onOptionsItemSelected(item)
     }
   }
 }

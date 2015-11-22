@@ -2,6 +2,7 @@ package copytoshare
 
 import android.app.Service
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
 import android.os.IBinder
@@ -98,7 +99,7 @@ class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListe
     //    return null
   }
 
-  // TODO: is there a cleaner way to do this that doesn't involve regex?
+  // TODO: is there a cleaner way to do this that doesn't involve crazy regexes?
   private fun isUrl(text: String?): Boolean {
     try {
       URL(text)
@@ -126,4 +127,14 @@ class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListe
     get() {
       return applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
     }
+
+  companion object {
+    fun start(context: Context) {
+      context.startService(Intent(context, CopyToShareService::class.java))
+    }
+
+    fun stop(context: Context) {
+      context.stopService(Intent(context, CopyToShareService::class.java))
+    }
+  }
 }
