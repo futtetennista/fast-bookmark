@@ -11,6 +11,34 @@ import java.net.URL
 
 class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListener {
 
+  private val CHOOSER_ITEM_FLAGS: Int =
+      (Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+          or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+          or(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+          or(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+          or(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+          or(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY)
+          or(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+          or(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+          or(Intent.FLAG_ACTIVITY_NEW_TASK)
+          or(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+          or(Intent.FLAG_ACTIVITY_NO_HISTORY)
+          or(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+          or(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP)
+          or(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+          or(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+          or(Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS)
+          or(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+          //          or(Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+          //          or(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+          //          or(Intent.FLAG_GRANT_PREFIX_URI_PERMISSION)
+          //          or(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+          //          or(Intent.FLAG_RECEIVER_FOREGROUND)
+          //          or(Intent.FLAG_RECEIVER_NO_ABORT)
+          //          or(Intent.FLAG_RECEIVER_REGISTERED_ONLY)
+          //          or(Intent.FLAG_RECEIVER_REPLACE_PENDING)
+          )
+
   override fun onPrimaryClipChanged() {
     if (!clipboardManager.hasPrimaryClip()) return
 
@@ -27,14 +55,15 @@ class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListe
   }
 
   private fun favouriteBookmarksAppOrChooserIntent(intent: Intent): Intent? {
-    val info = retrieveFavouriteBookmarksAppInfo(intent)
-    if (info != null) {
-      return Intent(intent).setClassName(info.first, info.second)
-          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val shareActivityInfo = retrieveFavouriteBookmarksAppInfo(intent)
+    if (shareActivityInfo != null) {
+      return Intent(intent)
+          .setClassName(shareActivityInfo.first, shareActivityInfo.second)
+          .setFlags(CHOOSER_ITEM_FLAGS)
     } else {
+      val text = applicationContext.getString(R.string.save_link)
       val chooserIntent =
-          Intent.createChooser(intent, applicationContext.getString(R.string.save_link))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+          Intent.createChooser(intent, text).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
       return if (chooserIntent.resolveActivity(packageManager) != null) {
         chooserIntent
       } else {
@@ -53,19 +82,20 @@ class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListe
   }
 
   private fun favouriteBookmarksAppInstalled(intent: Intent,
-                                             shareActivityInfo: Pair<String, String>)
+                                             shareActivityInfo: Pair<String, String>?)
       : Boolean {
     val activities =
         applicationContext.packageManager.queryIntentActivities(intent, MATCH_DEFAULT_ONLY)
     val res = activities.filter { a ->
-      a.activityInfo.packageName == shareActivityInfo.first
-          && a.activityInfo.name == shareActivityInfo.second
+      a.activityInfo.packageName == shareActivityInfo?.first
+          && a.activityInfo.name == shareActivityInfo?.second
     }
     return res.isNotEmpty()
   }
 
-  private fun retrieveStoredFavouriteBookmarksAppInfo(): Pair<String, String> {
+  private fun retrieveStoredFavouriteBookmarksAppInfo(): Pair<String, String>? {
     return Pair("com.ideashower.readitlater.pro", "com.ideashower.readitlater.activity.AddActivity")
+    //    return null
   }
 
   // TODO: is there a cleaner way to do this that doesn't involve regex?
