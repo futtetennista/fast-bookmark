@@ -1,6 +1,7 @@
-package copytoshare.inject
+package copytoshare
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Module
@@ -18,5 +19,9 @@ class ApplicationModule {
 
   @Provides @Singleton fun providePreferences(): SharedPreferences {
     return PreferenceManager.getDefaultSharedPreferences(application)
+  }
+
+  @Provides @Singleton fun provideContext(): Context {
+    return application.applicationContext
   }
 }

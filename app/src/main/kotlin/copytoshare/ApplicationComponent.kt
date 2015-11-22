@@ -1,7 +1,7 @@
-package copytoshare.inject
+package copytoshare
 
-import copytoshare.CopyToShareApplication
-import copytoshare.SettingsActivity
+import android.content.Context
+import android.content.SharedPreferences
 import dagger.Component
 import javax.inject.Singleton
 
@@ -10,5 +10,8 @@ import javax.inject.Singleton
 interface ApplicationComponent {
 
   fun inject(application: CopyToShareApplication)
-  fun inject(preferenceFragment: SettingsActivity.GeneralPreferenceFragment)
+
+  // Expose preferences to child-components
+  fun context(): Context
+  fun preferences(): SharedPreferences
 }

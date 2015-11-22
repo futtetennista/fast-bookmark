@@ -1,4 +1,4 @@
-package copytoshare
+package copytoshare.ui.preferences
 
 import android.app.Activity
 import android.content.res.Configuration

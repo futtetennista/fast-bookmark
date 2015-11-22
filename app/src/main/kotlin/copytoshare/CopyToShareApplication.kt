@@ -1,22 +1,19 @@
 package copytoshare
 
 import android.app.Application
-import copytoshare.inject.ApplicationComponent
-import copytoshare.inject.ApplicationModule
-import copytoshare.inject.DaggerApplicationComponent
+import copytoshare.background.service.CopyToShareService
 
 class CopyToShareApplication : Application() {
 
   companion object {
-    //platformStatic allow access it from java code
-    @JvmStatic lateinit var objectGraph: ApplicationComponent
+    lateinit var component: ApplicationComponent
   }
 
   override fun onCreate() {
     super.onCreate()
-    objectGraph =
+    component =
         DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
-    objectGraph.inject(this)
+    component.inject(this)
 
     CopyToShareService.start(this)
   }
