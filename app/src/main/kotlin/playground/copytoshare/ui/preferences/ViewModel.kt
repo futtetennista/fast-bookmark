@@ -42,6 +42,7 @@ class ViewModel(context: Context, preferences: AppPreferences) {
         activities.foldRight(Pair(arrayListOf<CharSequence>(), arrayListOf<String>()),
             { resolveInfo, acc ->
               val activityInfo = resolveInfo.activityInfo
+              // TODO: fix appearance
               val entry = SpannableString(" " + resolveInfo.loadLabel(context.packageManager))
               val icon = activityInfo.applicationInfo.loadIcon(context.packageManager)
               icon.bounds = Rect(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)

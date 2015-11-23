@@ -37,14 +37,14 @@ class Presenter(context: Context) {
 
   private fun setComponentsEnableState(enabledState: Int) {
     context.packageManager.setComponentEnabledSetting(
-        ComponentName.createRelative(context, CopyToShareService::class.java.name),
+        ComponentName(context, CopyToShareService::class.java.name),
         enabledState,
-        0
+        PackageManager.DONT_KILL_APP
     )
     context.packageManager.setComponentEnabledSetting(
-        ComponentName.createRelative(context, BootBroadcastReceiver::class.java.name),
+        ComponentName(context, BootBroadcastReceiver::class.java.name),
         enabledState,
-        0
+        PackageManager.DONT_KILL_APP
     )
   }
 }

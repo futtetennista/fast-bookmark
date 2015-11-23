@@ -7,19 +7,19 @@ class AppPreferences(preferences: SharedPreferences) {
 
   private var preferences: SharedPreferences
 
+  private val delimiter = "/"
+
   init {
     this.preferences = preferences
   }
 
   fun getFavouriteBookmarksAppData(): Pair<String, String>? {
-    val split = preferences.getString("pref_list_favourite_sharing_app", null)?.split("/")
+    val split = preferences.getString("pref_list_favourite_sharing_app", null)?.split(delimiter)
     return if (split != null && split.isNotEmpty()) {
       Pair(split[0], split[1])
     } else {
       null
     }
-    // return Pair("com.ideashower.readitlater.pro",
-    // "com.ideashower.readitlater.activity.AddActivity")
   }
 
   fun getFavouriteBookmarksAppDataAsString(): String? {
@@ -36,6 +36,6 @@ class AppPreferences(preferences: SharedPreferences) {
   }
 
   private fun toString(packageName: String, activityName: String): String {
-    return "$packageName/$activityName"
+    return "$packageName$delimiter$activityName"
   }
 }
