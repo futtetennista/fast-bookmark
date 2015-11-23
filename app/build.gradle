@@ -20,7 +20,7 @@ android {
   buildToolsVersion "23.0.2"
 
   defaultConfig {
-    applicationId "playground.copytoshare"
+    applicationId "com.stefano.playground.fastbookmark"
     minSdkVersion 16
     targetSdkVersion 23
     versionCode 1

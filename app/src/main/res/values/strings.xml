@@ -1,9 +1,8 @@
 <resources>
-  <string name="app_name">CopyToShare</string>
+  <string name="app_name">Fast Bookmark</string>
 
   <string name="save_link">"Save link"</string>
   <string name="pref_default_app">Default app</string>
   <string name="pref_enable">Enable …</string>
-
 
 </resources>

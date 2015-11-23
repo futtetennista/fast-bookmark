@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="playground.copytoshare">
+    package="com.stefano.playground.fastbookmark">
 
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   <application
-      android:name=".CopyToShareApplication"
+      android:name=".FastBookmarkApplication"
       android:allowBackup="true"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
@@ -22,6 +22,6 @@
 
     <receiver android:name=".background.boot.BootBroadcastReceiver" android:enabled="true" />
 
-    <service android:name=".background.service.CopyToShareService" android:enabled="true" />
+    <service android:name=".background.service.FastBookmarkService" android:enabled="true" />
   </application>
 </manifest>
