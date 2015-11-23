@@ -2,10 +2,10 @@ package playground.copytoshare
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import playground.copytoshare.utils.AppPreferences
 import javax.inject.Singleton
 
 @Module
@@ -17,8 +17,9 @@ class ApplicationModule {
     this.application = application
   }
 
-  @Provides @Singleton fun preferences(): SharedPreferences {
-    return PreferenceManager.getDefaultSharedPreferences(application)
+  @Provides @Singleton fun preferences(): AppPreferences {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
+    return AppPreferences(sharedPreferences)
   }
 
   @Provides @Singleton fun context(): Context {

@@ -1,9 +1,9 @@
 package playground.copytoshare.ui.preferences
 
 import android.content.Context
-import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import playground.copytoshare.utils.AppPreferences
 
 @Module
 class FragmentModule {
@@ -13,7 +13,7 @@ class FragmentModule {
   }
 
   @Provides fun provideViewModel(context: Context,
-                                 preferences: SharedPreferences): ViewModel {
+                                 preferences: AppPreferences): ViewModel {
     return ViewModel(context, preferences)
   }
 }

@@ -4,18 +4,18 @@ import android.app.Service
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
 import android.os.IBinder
 import playground.copytoshare.CopyToShareApplication
 import playground.copytoshare.R
+import playground.copytoshare.utils.AppPreferences
 import java.net.MalformedURLException
 import java.net.URL
 import javax.inject.Inject
 
 class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListener {
 
-  @Inject lateinit var preferences: SharedPreferences
+  @Inject lateinit var preferences: AppPreferences
 
   private val CHOOSER_ITEM_FLAGS: Int =
       (Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
@@ -79,7 +79,7 @@ class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListe
   }
 
   private fun retrieveFavouriteBookmarksAppInfo(intent: Intent): Pair<String, String>? {
-    val info = retrieveStoredFavouriteBookmarksAppInfo()
+    val info = preferences.getFavouriteBookmarksAppData()
     return if (favouriteBookmarksAppInstalled(intent, info)) {
       info
     } else {
@@ -97,16 +97,6 @@ class CopyToShareService : Service(), ClipboardManager.OnPrimaryClipChangedListe
           && a.activityInfo.name == shareActivityInfo?.second
     }
     return res.isNotEmpty()
-  }
-
-  private fun retrieveStoredFavouriteBookmarksAppInfo(): Pair<String, String>? {
-    val split = preferences.getString("pref_list_favourite_sharing_app", null)?.split("/")
-    return if (split != null && split.isNotEmpty()) {
-      Pair(split[0], split[1])
-    } else {
-      null
-    }
-    //    return Pair("com.ideashower.readitlater.pro", "com.ideashower.readitlater.activity.AddActivity")
   }
 
   // TODO: is there a cleaner way to do this that doesn't involve crazy regexes?

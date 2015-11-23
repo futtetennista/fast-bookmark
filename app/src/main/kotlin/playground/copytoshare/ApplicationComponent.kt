@@ -1,8 +1,8 @@
 package playground.copytoshare
 
 import android.content.Context
-import android.content.SharedPreferences
 import dagger.Component
+import playground.copytoshare.utils.AppPreferences
 import javax.inject.Singleton
 
 @Singleton
@@ -13,5 +13,5 @@ interface ApplicationComponent {
 
   // Expose to the graph
   fun context(): Context
-  fun preferences(): SharedPreferences
+  fun preferences(): AppPreferences
 }
