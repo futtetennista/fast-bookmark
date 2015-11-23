@@ -8,8 +8,12 @@ import dagger.Provides
 @Module
 class FragmentModule {
 
-  @Provides fun providePresenter(context: Context,
-                                 preferences: SharedPreferences): Presenter {
-    return Presenter(context, preferences)
+  @Provides fun providePresenter(context: Context): Presenter {
+    return Presenter(context)
+  }
+
+  @Provides fun provideViewModel(context: Context,
+                                 preferences: SharedPreferences): ViewModel {
+    return ViewModel(context, preferences)
   }
 }

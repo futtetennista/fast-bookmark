@@ -7,6 +7,7 @@ import android.preference.ListPreference
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.view.MenuItem
+import android.view.View
 import playground.copytoshare.CopyToShareApplication
 import playground.copytoshare.R
 import javax.inject.Inject
@@ -65,6 +66,7 @@ class SettingsActivity : AppCompatActivity() {
       get() = findPreference("pref_switch_enable")
 
     @Inject lateinit var presenter: Presenter
+    @Inject lateinit var viewModel: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
@@ -74,7 +76,13 @@ class SettingsActivity : AppCompatActivity() {
       addPreferencesFromResource(R.xml.pref_general)
       setHasOptionsMenu(true)
       retainInstance = true
+    }
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+      super.onViewCreated(view, savedInstanceState)
+      sharingApp?.entries = viewModel.entries
+      sharingApp?.entryValues = viewModel.entryValues
+      sharingApp?.setDefaultValue(viewModel.defaultValue)
       presenter.bindView(this)
     }
 
