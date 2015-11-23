@@ -1,4 +1,4 @@
-package copytoshare.ui.preferences
+package playground.copytoshare.ui.preferences
 
 import android.app.Activity
 import android.content.res.Configuration

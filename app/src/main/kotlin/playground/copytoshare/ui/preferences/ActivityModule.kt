@@ -1,9 +1,9 @@
-package copytoshare.ui.preferences
+package playground.copytoshare.ui.preferences
 
 import android.app.Activity
-import copytoshare.inject.ActivityScope
 import dagger.Module
 import dagger.Provides
+import playground.copytoshare.inject.ActivityScope
 
 @Module
 class ActivityModule {

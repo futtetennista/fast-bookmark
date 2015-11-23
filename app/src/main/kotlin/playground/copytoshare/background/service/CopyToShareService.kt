@@ -1,4 +1,4 @@
-package copytoshare.background.service
+package playground.copytoshare.background.service
 
 import android.app.Service
 import android.content.ClipboardManager

@@ -6,7 +6,7 @@
       android:defaultValue="true" />
 
   <ListPreference
-      android:key="pref_list_apps"
+      android:key="pref_list_favourite_sharing_app"
       android:title="@string/pref_default_app"
       android:defaultValue="-1"
       android:negativeButtonText="@null"

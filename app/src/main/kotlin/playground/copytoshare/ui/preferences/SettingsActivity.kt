@@ -1,4 +1,4 @@
-package copytoshare.ui.preferences
+package playground.copytoshare.ui.preferences
 
 
 import android.content.Intent
@@ -7,15 +7,13 @@ import android.preference.ListPreference
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.view.MenuItem
-import copytoshare.CopyToShareApplication
+import playground.copytoshare.CopyToShareApplication
 import playground.copytoshare.R
 import javax.inject.Inject
 
 class SettingsActivity : AppCompatActivity() {
 
-  companion object {
-    lateinit var component: ActivityComponent
-  }
+  lateinit var component: ActivityComponent
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -62,8 +60,8 @@ class SettingsActivity : AppCompatActivity() {
    */
   class GeneralPreferenceFragment : PreferenceFragment(), SettingsView {
     override val sharingApp: ListPreference?
-      get() = findPreference("pref_list_apps") as ListPreference
-    override val enable: Preference?
+      get() = findPreference("pref_list_favourite_sharing_app") as ListPreference
+    override val enableAutoSharing: Preference?
       get() = findPreference("pref_switch_enable")
 
     @Inject lateinit var presenter: Presenter
@@ -71,12 +69,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
 
-//      DaggerFragmentComponent
-//          .builder()
-//          .applicationComponent(CopyToShareApplication.component)
-//          .fragmentModule(FragmentModule())
-//          .build()
-//          .inject(this)
+      (activity as SettingsActivity).component.plus(FragmentModule()).inject(this)
 
       addPreferencesFromResource(R.xml.pref_general)
       setHasOptionsMenu(true)

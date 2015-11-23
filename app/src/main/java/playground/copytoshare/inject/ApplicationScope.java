@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package copytoshare.inject;
+package playground.copytoshare.inject;
 
 import javax.inject.Scope;
 import java.lang.annotation.Retention;
@@ -22,5 +22,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Scope
 @Retention(RUNTIME)
-public @interface FragmentScope {
+public @interface ApplicationScope {
 }

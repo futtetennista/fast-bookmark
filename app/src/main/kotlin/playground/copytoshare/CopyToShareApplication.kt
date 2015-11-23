@@ -1,7 +1,7 @@
-package copytoshare
+package playground.copytoshare
 
 import android.app.Application
-import copytoshare.background.service.CopyToShareService
+import playground.copytoshare.background.service.CopyToShareService
 
 class CopyToShareApplication : Application() {
 

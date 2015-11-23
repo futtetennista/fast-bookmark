@@ -1,10 +1,8 @@
-package copytoshare.ui.preferences
+package playground.copytoshare.ui.preferences
 
-import dagger.Component
 import dagger.Subcomponent
 
-@Subcomponent
-@Component(
+@Subcomponent(
     modules = arrayOf(FragmentModule::class)
 )
 interface FragmentComponent {

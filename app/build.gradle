@@ -20,7 +20,7 @@ android {
   buildToolsVersion "23.0.2"
 
   defaultConfig {
-    applicationId "copytoshare"
+    applicationId "playground.copytoshare"
     minSdkVersion 16
     targetSdkVersion 23
     versionCode 1
@@ -48,8 +48,8 @@ kapt {
 dependencies {
   kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
-  compile 'com.android.support:appcompat-v7:23.1.0'
-  compile 'com.android.support:support-v4:23.1.0'
+  compile 'com.android.support:appcompat-v7:23.1.1'
+  compile 'com.android.support:support-v4:23.1.1'
   compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   compile "com.google.dagger:dagger:$dagger_version"
   compile 'org.glassfish:javax.annotation:10.0-b28'

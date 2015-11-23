@@ -1,4 +1,4 @@
-package copytoshare
+package playground.copytoshare
 
 import android.app.Application
 import android.content.Context
@@ -17,11 +17,11 @@ class ApplicationModule {
     this.application = application
   }
 
-  @Provides @Singleton fun providePreferences(): SharedPreferences {
+  @Provides @Singleton fun preferences(): SharedPreferences {
     return PreferenceManager.getDefaultSharedPreferences(application)
   }
 
-  @Provides @Singleton fun provideContext(): Context {
+  @Provides @Singleton fun context(): Context {
     return application.applicationContext
   }
 }

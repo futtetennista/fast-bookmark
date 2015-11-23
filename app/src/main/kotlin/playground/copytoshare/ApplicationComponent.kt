@@ -1,4 +1,4 @@
-package copytoshare
+package playground.copytoshare
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,7 +11,7 @@ interface ApplicationComponent {
 
   fun inject(application: CopyToShareApplication)
 
-  // Expose preferences to child-components
+  // Expose to the graph
   fun context(): Context
   fun preferences(): SharedPreferences
 }
