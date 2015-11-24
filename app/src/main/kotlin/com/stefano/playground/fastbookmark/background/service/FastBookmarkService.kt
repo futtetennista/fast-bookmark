@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
 import android.os.IBinder
+import android.util.Log
 import com.stefano.playground.fastbookmark.FastBookmarkApplication
 import com.stefano.playground.fastbookmark.R
 import com.stefano.playground.fastbookmark.utils.AppPreferences
@@ -135,10 +136,12 @@ class FastBookmarkService : Service(), ClipboardManager.OnPrimaryClipChangedList
 
   companion object {
     fun start(context: Context) {
+      Log.i("FastBookmarkService", "starting…")
       context.startService(Intent(context, FastBookmarkService::class.java))
     }
 
     fun stop(context: Context) {
+      Log.i("FastBookmarkService", "stopping…")
       context.stopService(Intent(context, FastBookmarkService::class.java))
     }
   }

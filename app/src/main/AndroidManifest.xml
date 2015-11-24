@@ -20,8 +20,16 @@
       </intent-filter>
     </activity>
 
-    <receiver android:name=".background.boot.BootBroadcastReceiver" android:enabled="true" />
+    <receiver
+        android:name=".background.boot.BootBroadcastReceiver"
+        android:enabled="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+      </intent-filter>
+    </receiver>
 
-    <service android:name=".background.service.FastBookmarkService" android:enabled="true" />
+    <service
+        android:name=".background.service.FastBookmarkService"
+        android:enabled="true" />
   </application>
 </manifest>
