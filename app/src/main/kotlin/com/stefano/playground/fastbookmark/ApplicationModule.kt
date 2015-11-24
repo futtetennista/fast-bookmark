@@ -2,6 +2,7 @@ package com.stefano.playground.fastbookmark
 
 import android.app.Application
 import android.content.Context
+import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import com.stefano.playground.fastbookmark.utils.AppPreferences
 import dagger.Module
@@ -24,5 +25,9 @@ class ApplicationModule {
 
   @Provides @Singleton fun context(): Context {
     return application.applicationContext
+  }
+
+  @Provides @Singleton fun packageManager(): PackageManager {
+    return application.packageManager
   }
 }

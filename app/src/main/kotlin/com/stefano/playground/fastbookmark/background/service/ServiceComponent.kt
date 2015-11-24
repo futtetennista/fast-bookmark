@@ -5,7 +5,10 @@ import com.stefano.playground.fastbookmark.inject.ServiceScope
 import dagger.Component
 
 @ServiceScope
-@Component(dependencies = arrayOf(ApplicationComponent::class))
+@Component(
+    dependencies = arrayOf(ApplicationComponent::class),
+    modules = arrayOf(ServiceModule::class)
+    )
 interface ServiceComponent {
 
   fun inject(service: FastBookmarkService)

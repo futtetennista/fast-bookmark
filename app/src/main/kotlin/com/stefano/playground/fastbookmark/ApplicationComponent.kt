@@ -1,6 +1,7 @@
 package com.stefano.playground.fastbookmark
 
 import android.content.Context
+import android.content.pm.PackageManager
 import com.stefano.playground.fastbookmark.utils.AppPreferences
 import dagger.Component
 import javax.inject.Singleton
@@ -13,5 +14,6 @@ interface ApplicationComponent {
 
   // Expose to the graph
   fun context(): Context
+  fun packageManager(): PackageManager
   fun preferences(): AppPreferences
 }
