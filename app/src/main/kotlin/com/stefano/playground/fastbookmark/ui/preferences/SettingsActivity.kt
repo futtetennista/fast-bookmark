@@ -82,7 +82,7 @@ class SettingsActivity : AppCompatActivity() {
       super.onViewCreated(view, savedInstanceState)
       sharingApp?.entries = viewModel.entries
       sharingApp?.entryValues = viewModel.entryValues
-      sharingApp?.setDefaultValue(viewModel.defaultValue)
+      sharingApp?.setDefaultValue(viewModel.defaultEntryIndex)
       presenter.bindView(this)
     }
 

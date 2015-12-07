@@ -1,14 +1,17 @@
 buildscript {
   ext {
-    kotlin_version = '1.0.0-beta-2423'
-    dagger_version = '2.0.2'
+    kotlinVersion = '1.0.0-beta-2423'
+    daggerVersion = '2.0.2'
+    spekVersion   = '0.+'
+    mockitoVersion = '2.0.31-beta'
+    jUnitVersion = '4.12'
   }
 
   repositories {
     mavenCentral()
   }
   dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
   }
 }
 
@@ -34,6 +37,8 @@ android {
   }
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+    androidTest.java.srcDirs += 'src/androidTest/kotlin'
   }
 
   dexOptions {
@@ -46,17 +51,25 @@ kapt {
 }
 
 dependencies {
-  kapt "com.google.dagger:dagger-compiler:$dagger_version"
+  kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
   compile 'com.android.support:appcompat-v7:23.1.1'
   compile 'com.android.support:support-v4:23.1.1'
-  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  compile "com.google.dagger:dagger:$dagger_version"
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  compile "com.google.dagger:dagger:$daggerVersion"
   compile 'org.glassfish:javax.annotation:10.0-b28'
 
-  testCompile 'junit:junit:4.12'
+  testCompile "junit:junit:$jUnitVersion"
+  testCompile("org.jetbrains.spek:spek:$spekVersion") {
+    exclude group: 'org.jetbrains.kotlin'
+  }
+  testCompile "org.mockito:mockito-core:$mockitoVersion"
+
+  androidTestCompile "junit:junit:$jUnitVersion"
+  androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
 }
 
 repositories {
   mavenCentral()
+  maven { url "http://repository.jetbrains.com/all" }
 }

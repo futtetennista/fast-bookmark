@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import com.stefano.playground.fastbookmark.FastBookmarkApplication
 import javax.inject.Inject
 
@@ -34,12 +33,12 @@ class FastBookmarkService : Service() {
 
   companion object {
     fun start(context: Context) {
-      Log.i("FastBookmarkService", "starting…")
+//      Log.i("FastBookmarkService", "starting…")
       context.startService(Intent(context, FastBookmarkService::class.java))
     }
 
     fun stop(context: Context) {
-      Log.i("FastBookmarkService", "stopping…")
+//      Log.i("FastBookmarkService", "stopping…")
       context.stopService(Intent(context, FastBookmarkService::class.java))
     }
   }

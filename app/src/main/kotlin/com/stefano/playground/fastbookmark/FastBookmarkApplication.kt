@@ -1,6 +1,7 @@
 package com.stefano.playground.fastbookmark
 
 import android.app.Application
+import com.stefano.playground.fastbookmark.background.service.FastBookmarkService
 
 class FastBookmarkApplication : Application() {
 
@@ -17,6 +18,6 @@ class FastBookmarkApplication : Application() {
             .build()
     component.inject(this)
 
-    com.stefano.playground.fastbookmark.background.service.FastBookmarkService.Companion.start(this)
+    FastBookmarkService.start(this)
   }
 }

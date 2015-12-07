@@ -1,6 +1,7 @@
 package com.stefano.playground.fastbookmark.ui.preferences
 
 import android.content.Context
+import android.content.pm.PackageManager
 import com.stefano.playground.fastbookmark.utils.AppPreferences
 import dagger.Module
 import dagger.Provides
@@ -8,12 +9,18 @@ import dagger.Provides
 @Module
 class FragmentModule {
 
-  @Provides fun providePresenter(context: Context): Presenter {
-    return Presenter(context)
+  @Provides fun providePresenter(context: Context,
+                                 packageManager: PackageManager,
+                                 factory: AndroidFactory): Presenter {
+    return Presenter(context, packageManager, factory)
   }
 
-  @Provides fun provideViewModel(context: Context,
+  @Provides fun provideViewModel(packageManager: PackageManager,
                                  preferences: AppPreferences): ViewModel {
-    return ViewModel(context, preferences)
+    return ViewModel(packageManager, preferences)
+  }
+
+  @Provides fun provideAndroidFactory(): AndroidFactory {
+    return AndroidFactoryImpl()
   }
 }
