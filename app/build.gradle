@@ -28,6 +28,8 @@ android {
     targetSdkVersion 23
     versionCode 1
     versionName "1.0"
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
   buildTypes {
     release {
@@ -66,10 +68,18 @@ dependencies {
   testCompile "org.mockito:mockito-core:$mockitoVersion"
 
   androidTestCompile "junit:junit:$jUnitVersion"
-  androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
+  androidTestCompile('com.google.dexmaker:dexmaker-mockito:1.2') { exclude group: 'org.hamcrest' }
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+  androidTestCompile 'com.android.support.test:runner:0.4.1'
 }
 
 repositories {
   mavenCentral()
   maven { url "http://repository.jetbrains.com/all" }
+}
+
+configurations.all {
+  resolutionStrategy {
+    force 'com.android.support:support-annotations:23.1.1'
+  }
 }

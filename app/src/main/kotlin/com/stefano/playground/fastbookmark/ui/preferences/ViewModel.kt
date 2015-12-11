@@ -40,10 +40,10 @@ class ViewModel(packageManager: PackageManager, preferences: AppPreferences) {
               val activityInfo = resolveInfo.activityInfo
               // TODO: fix appearance
               val entry = SpannableString(resolveInfo.loadLabel(packageManager))
-//              val icon = activityInfo.applicationInfo.loadIcon(packageManager)
-//              icon.bounds = Rect(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
-//              entry.setSpan(ImageSpan(icon, DynamicDrawableSpan.ALIGN_BASELINE),
-//                  0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+              //              val icon = activityInfo.applicationInfo.loadIcon(packageManager)
+              //              icon.bounds = Rect(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+              //              entry.setSpan(ImageSpan(icon, DynamicDrawableSpan.ALIGN_BASELINE),
+              //                  0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
               acc.first.add(entry)
               acc.second.add(preferences.toString(activityInfo))
               acc
@@ -54,8 +54,11 @@ class ViewModel(packageManager: PackageManager, preferences: AppPreferences) {
 
   private fun retrieveDefaultAppIndex(preferences: AppPreferences,
                                       entryValues: Array<out CharSequence>?): Int? {
+    val favouriteBookmarksAppData =
+        preferences.getFavouriteBookmarksAppDataAsString() ?: return null
+
     entryValues?.toArrayList()?.mapIndexed { idx, value ->
-      if (value == preferences.getFavouriteBookmarksAppDataAsString()) {
+      if (value == favouriteBookmarksAppData) {
         return idx
       }
     }
