@@ -16,3 +16,10 @@ Simply copy a link to add it to your favourite read later service
 `AppPreferences::class` returns a `kotlin.reflect.KClass` reference and not a `java.lang.Class`
 one, needed by mockito. Using `AppPreferences::class.java` returns the java class but the mocking
  does not work.
+
+# Gotchas
+- when mocking a method defined in a kotlin class, the parameters must be optionals in order for
+the mocking to work, otherwise the tests will fail with an `java.lang.IllegalStateException: any
+(SomeClass::class.java) must not be null`
+- when mocking a kotlin class it is necessary to create an interface and mock it instead of the
+implementation, otherwise the mocks won' work. Is there a better way to do this?

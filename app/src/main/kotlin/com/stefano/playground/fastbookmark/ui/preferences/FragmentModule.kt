@@ -11,7 +11,7 @@ class FragmentModule {
 
   @Provides fun providePresenter(context: Context,
                                  packageManager: PackageManager,
-                                 factory: AndroidFactory): Presenter {
+                                 factory: ComponentNameFactory): Presenter {
     return Presenter(context, packageManager, factory)
   }
 
@@ -20,7 +20,7 @@ class FragmentModule {
     return ViewModel(packageManager, preferences)
   }
 
-  @Provides fun provideAndroidFactory(): AndroidFactory {
-    return AndroidFactoryImpl()
+  @Provides fun provideAndroidFactory(): ComponentNameFactory {
+    return ComponentNameFactoryImpl()
   }
 }

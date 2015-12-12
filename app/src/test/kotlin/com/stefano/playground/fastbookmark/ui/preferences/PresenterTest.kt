@@ -18,7 +18,7 @@ class PresenterTest {
 
   @Mock lateinit var context: Context
   @Mock lateinit var packageManager: PackageManager
-  @Mock lateinit var factory: AndroidFactory
+  @Mock lateinit var factory: ComponentNameFactory
 
   private lateinit var view: SettingsView
   private lateinit var presenter: Presenter

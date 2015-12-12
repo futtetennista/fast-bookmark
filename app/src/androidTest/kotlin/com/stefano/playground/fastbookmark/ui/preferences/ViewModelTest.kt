@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.support.test.runner.AndroidJUnit4
 import android.test.suitebuilder.annotation.SmallTest
-import com.stefano.playground.fastbookmark.utils.AppPreferences
+import com.stefano.playground.fastbookmark.utils.AppPreferencesImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +34,7 @@ class ViewModelTest {
     var preferences = mock(SharedPreferences::class.java)
     `when`(preferences.getString(eq("pref_list_favourite_sharing_app"), anyString()))
         .thenReturn("foo.bar/foo")
-    val appPreferences = AppPreferences(preferences)
+    val appPreferences = AppPreferencesImpl(preferences)
     viewModel = ViewModel(packageManager, appPreferences)
   }
 
@@ -55,7 +55,7 @@ class ViewModelTest {
     assertEquals(1, viewModel.defaultEntryIndex)
   }
 
-  private fun assertAllElementsNotNull(entries: Array<out CharSequence>) {
+  private fun assertAllElementsNotNull(entries: Array<out CharSequence?>) {
     for (entry in entries) {
       assertNotNull(entry)
     }

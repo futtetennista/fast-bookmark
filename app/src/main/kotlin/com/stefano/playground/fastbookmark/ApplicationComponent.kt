@@ -1,5 +1,6 @@
 package com.stefano.playground.fastbookmark
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import com.stefano.playground.fastbookmark.utils.AppPreferences
@@ -16,4 +17,5 @@ interface ApplicationComponent {
   fun context(): Context
   fun packageManager(): PackageManager
   fun preferences(): AppPreferences
+  fun clipboardManager(): ClipboardManager
 }

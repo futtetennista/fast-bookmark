@@ -3,36 +3,48 @@ package com.stefano.playground.fastbookmark.utils
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 
-class AppPreferences(preferences: SharedPreferences) {
+interface AppPreferences {
+  fun getFavouriteBookmarks(): ActivityInfo?
+  fun getFavouriteBookmarksAsString(): String?
+  fun toString(activityInfo: ActivityInfo?): String?
+}
 
-  private var preferences: SharedPreferences
+class AppPreferencesImpl(preferences: SharedPreferences): AppPreferences {
 
   private val delimiter = "/"
+  private var preferences: SharedPreferences
 
   init {
     this.preferences = preferences
   }
 
-  fun getFavouriteBookmarksAppData(): Pair<String, String>? {
-    val split = preferences.getString("pref_list_favourite_sharing_app", null)?.split(delimiter)
-    return if (split != null && split.isNotEmpty()) {
-      Pair(split[0], split[1])
+  override fun getFavouriteBookmarks(): ActivityInfo? {
+    val tokens = preferences.getString("pref_list_favourite_sharing_app", null)?.split(delimiter)
+    return if (tokens != null && tokens.isNotEmpty()) {
+      val info = ActivityInfo()
+      info.packageName = tokens.first()
+      info.name = tokens.last()
+      return info
     } else {
       null
     }
   }
 
-  fun getFavouriteBookmarksAppDataAsString(): String? {
-    val favouriteBookmarksAppData = getFavouriteBookmarksAppData()
+  override fun getFavouriteBookmarksAsString(): String? {
+    val favouriteBookmarksAppData = getFavouriteBookmarks()
     return if (favouriteBookmarksAppData == null) {
       null
     } else {
-      toString(favouriteBookmarksAppData.first, favouriteBookmarksAppData.second)
+      toString(favouriteBookmarksAppData.packageName, favouriteBookmarksAppData.name)
     }
   }
 
-  fun toString(activityInfo: ActivityInfo): String {
-    return toString(activityInfo.applicationInfo.packageName, activityInfo.name)
+  override fun toString(activityInfo: ActivityInfo?): String? {
+    return if (activityInfo == null) {
+      null
+    } else {
+      toString(activityInfo.packageName, activityInfo.name)
+    }
   }
 
   private fun toString(packageName: String, activityName: String): String {

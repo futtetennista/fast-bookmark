@@ -9,10 +9,8 @@ import com.stefano.playground.fastbookmark.utils.AppPreferences
 class ViewModel(packageManager: PackageManager, preferences: AppPreferences) {
 
   val defaultEntryIndex: Int?
-
   val entries: Array<out CharSequence>?
-
-  val entryValues: Array<out CharSequence>?
+  val entryValues: Array<out CharSequence?>?
 
   init {
     val data = retrieveSharingAppsData(packageManager, preferences)
@@ -23,7 +21,7 @@ class ViewModel(packageManager: PackageManager, preferences: AppPreferences) {
 
   private fun retrieveSharingAppsData(packageManager: PackageManager,
                                       preferences: AppPreferences):
-      Pair<Array<out CharSequence>, Array<out String>> {
+      Pair<Array<out CharSequence>, Array<out String?>> {
     val intent = Intent(Intent.ACTION_SEND).setType("text/plain")
     val activities =
         packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
@@ -33,9 +31,9 @@ class ViewModel(packageManager: PackageManager, preferences: AppPreferences) {
   private fun retrieveSharingAppDataFromActivities(activities: MutableList<ResolveInfo>,
                                                    packageManager: PackageManager,
                                                    preferences: AppPreferences):
-      Pair<Array<CharSequence>, Array<String>> {
+      Pair<Array<CharSequence>, Array<String?>> {
     val entryAndValues =
-        activities.foldRight(Pair(arrayListOf<CharSequence>(), arrayListOf<String>()),
+        activities.foldRight(Pair(arrayListOf<CharSequence>(), arrayListOf<String?>()),
             { resolveInfo, acc ->
               val activityInfo = resolveInfo.activityInfo
               // TODO: fix appearance
@@ -53,9 +51,9 @@ class ViewModel(packageManager: PackageManager, preferences: AppPreferences) {
   }
 
   private fun retrieveDefaultAppIndex(preferences: AppPreferences,
-                                      entryValues: Array<out CharSequence>?): Int? {
+                                      entryValues: Array<out CharSequence?>?): Int? {
     val favouriteBookmarksAppData =
-        preferences.getFavouriteBookmarksAppDataAsString() ?: return null
+        preferences.getFavouriteBookmarksAsString() ?: return null
 
     entryValues?.toArrayList()?.mapIndexed { idx, value ->
       if (value == favouriteBookmarksAppData) {

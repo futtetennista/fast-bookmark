@@ -6,11 +6,11 @@ import android.preference.Preference
 import com.stefano.playground.fastbookmark.background.boot.BootBroadcastReceiver
 import com.stefano.playground.fastbookmark.background.service.FastBookmarkService
 
-open class Presenter(context: Context, packageManager: PackageManager, factory: AndroidFactory) {
+open class Presenter(context: Context, packageManager: PackageManager, factory: ComponentNameFactory) {
 
   val context: Context
   val packageManager: PackageManager
-  val factory: AndroidFactory
+  val factory: ComponentNameFactory
 
   init {
     this.context = context
