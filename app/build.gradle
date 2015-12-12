@@ -46,6 +46,10 @@ android {
   dexOptions {
     javaMaxHeapSize "2048M"
   }
+
+  lintOptions {
+    abortOnError false
+  }
 }
 
 kapt {
