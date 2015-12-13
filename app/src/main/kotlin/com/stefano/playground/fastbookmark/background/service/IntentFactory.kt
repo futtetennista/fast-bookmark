@@ -29,12 +29,12 @@ class IntentFactoryImpl(applicationContext: Context) : IntentFactory {
                                                  shareActivityInfo: ActivityInfo?): Intent? {
     val intent = createShareIntent(item)
 
-    return if (item == null || shareActivityInfo == null){
-      Intent(intent)
-          .setClassName(shareActivityInfo!!.packageName, shareActivityInfo.name)
-          .setFlags(CHOOSER_ITEM_FLAGS)
-    } else {
+    return if (item == null || shareActivityInfo == null) {
       null
+    } else {
+      Intent(intent)
+          .setClassName(shareActivityInfo.packageName, shareActivityInfo.name)
+          .setFlags(CHOOSER_ITEM_FLAGS)
     }
   }
 
@@ -56,7 +56,8 @@ class IntentFactoryImpl(applicationContext: Context) : IntentFactory {
   }
 
   override fun createAppIntent(): Intent {
-   return Intent(applicationContext, SettingsActivity::class.java)
+    return Intent(applicationContext, SettingsActivity::class.java)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   }
 
   companion object {

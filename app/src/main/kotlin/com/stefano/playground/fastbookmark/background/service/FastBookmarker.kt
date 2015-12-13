@@ -68,7 +68,7 @@ class FastBookmarker(clipboardManager: ClipboardManager,
       intentFactory.createFavouriteBookmarksAppIntent(item, shareActivityInfo)
     } else {
       val chooserIntent = intentFactory.createChooserIntent(item)
-      return if (chooserIntent != null
+      if (chooserIntent != null
           && packageManagerDelegate.canAnyInstalledAppHandleIntent(chooserIntent)) {
         chooserIntent
       } else {
