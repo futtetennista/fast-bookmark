@@ -1,5 +1,18 @@
 package com.stefano.playground.fastbookmark.background.service
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import com.stefano.playground.fastbookmark.utils.AppPreferences
+import com.stefano.playground.fastbookmark.utils.PackageManagerDelegate
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
+
 class FastBookmarkerTest {
 
   @Mock lateinit var clipboardManager: ClipboardManager
