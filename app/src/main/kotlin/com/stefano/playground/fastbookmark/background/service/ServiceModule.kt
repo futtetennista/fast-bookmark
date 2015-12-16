@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.stefano.playground.fastbookmark.inject.ServiceScope
 import com.stefano.playground.fastbookmark.utils.AppPreferences
-import com.stefano.playground.fastbookmark.utils.PackageManagerDelegate
 import com.stefano.playground.fastbookmark.utils.PackageManagerDelegateImpl
 import dagger.Module
 import dagger.Provides
@@ -17,17 +16,13 @@ class ServiceModule {
     return IntentFactoryImpl(context)
   }
 
-  @Provides @ServiceScope
-  fun providePackageManagerDelegate(packageManager: PackageManager): PackageManagerDelegate {
-    return PackageManagerDelegateImpl(packageManager)
-  }
-
   @Provides @ServiceScope fun provideFastBookmarker(
       clipboardManager: ClipboardManager,
       context: Context,
-      packageManagerDelegate: PackageManagerDelegate,
+      packageManager: PackageManager,
       preferences: AppPreferences,
       intentFactory: IntentFactory): FastBookmarker {
+    val packageManagerDelegate = PackageManagerDelegateImpl(packageManager)
     return FastBookmarker(clipboardManager, context, packageManagerDelegate, preferences,
         intentFactory)
   }

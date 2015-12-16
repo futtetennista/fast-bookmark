@@ -3,8 +3,13 @@ package com.stefano.playground.fastbookmark.utils
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 
 interface PackageManagerDelegate {
+
+  val packageManager: PackageManager
+
+  fun retrieveIntentHandlers(intent: Intent?): MutableList<ResolveInfo>
 
   fun isIntentHandlerInstalled(intent: Intent?,
                                shareActivityInfo: ActivityInfo?): Boolean
@@ -13,16 +18,22 @@ interface PackageManagerDelegate {
 }
 
 class PackageManagerDelegateImpl(packageManager: PackageManager) : PackageManagerDelegate {
-
-  private var packageManager: PackageManager
+  override val packageManager: PackageManager
+    get() = pm
+  private var pm: PackageManager
 
   init {
-    this.packageManager = packageManager
+    this.pm = packageManager
+  }
+
+
+  override fun retrieveIntentHandlers(intent: Intent?): MutableList<ResolveInfo> {
+    return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
   }
 
   override fun isIntentHandlerInstalled(intent: Intent?,
                                         shareActivityInfo: ActivityInfo?): Boolean {
-    val activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    val activities = retrieveIntentHandlers(intent)
     val res = activities.filter { a ->
       a.activityInfo.packageName == shareActivityInfo?.packageName
           && a.activityInfo.name == shareActivityInfo?.name

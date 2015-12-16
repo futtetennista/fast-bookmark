@@ -4,16 +4,19 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.support.test.runner.AndroidJUnit4
 import android.test.suitebuilder.annotation.SmallTest
+import com.stefano.playground.fastbookmark.utils.AppPreferences
 import com.stefano.playground.fastbookmark.utils.AppPreferencesImpl
+import com.stefano.playground.fastbookmark.utils.PackageManagerDelegate
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyString
 import org.mockito.MockitoAnnotations
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -22,20 +25,22 @@ import kotlin.test.assertNotNull
 @RunWith(AndroidJUnit4::class)
 class ViewModelTest {
 
+  @Mock lateinit var packageManagerDelegate: PackageManagerDelegate
+  @Mock lateinit var preferences: SharedPreferences
+  lateinit var appPreferences: AppPreferences
   lateinit var viewModel: ViewModel
 
   @Before
   fun setUp() {
     MockitoAnnotations.initMocks(this)
-    val packageManager = mock(PackageManager::class.java)
-    `when`(packageManager.queryIntentActivities(Mockito.any(Intent::class.java),
-        eq(PackageManager.MATCH_DEFAULT_ONLY)))
-        .thenReturn(toResolveInfo(listOf("foo", "bar")))
-    var preferences = mock(SharedPreferences::class.java)
-    `when`(preferences.getString(eq("pref_list_favourite_sharing_app"), anyString()))
-        .thenReturn("foo.bar/foo")
-    val appPreferences = AppPreferencesImpl(preferences)
-    viewModel = ViewModel(packageManager, appPreferences)
+    `when`(packageManagerDelegate.retrieveIntentHandlers(Mockito.any(Intent::class.java)))
+        .thenReturn(toResolveInfo(mapOf(
+            Pair("package.name.foo", "FooActivity"),
+            Pair("package.name.bar", "BarActivity"))))
+    `when`(preferences.getString(anyString(), anyString()))
+        .thenReturn("package.name.foo/FooActivity")
+    appPreferences = AppPreferencesImpl(preferences)
+    viewModel = ViewModel(packageManagerDelegate, appPreferences)
   }
 
   @Test
@@ -61,13 +66,14 @@ class ViewModelTest {
     }
   }
 
-  private fun toResolveInfo(activityNames: List<String>): MutableList<ResolveInfo> {
-    return activityNames.map { name ->
+  private fun toResolveInfo(infoMap: Map<String, String>): MutableList<ResolveInfo> {
+    return infoMap.map { entry ->
       val resolveInfo = ResolveInfo()
       val activityInfo = ActivityInfo()
       val applicationInfo = ApplicationInfo()
-      applicationInfo.packageName = "foo.bar"
-      activityInfo.name = name
+      applicationInfo.packageName = entry.key
+      activityInfo.name = entry.value
+      activityInfo.packageName = entry.key
       resolveInfo.activityInfo = activityInfo
       resolveInfo.activityInfo.applicationInfo = applicationInfo
       resolveInfo
