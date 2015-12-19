@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/stefanodacchille/fast-bookmark.svg)](https://travis-ci.org/stefanodacchille/fast-bookmark)
+[![License](https://img.shields.io/badge/license-BSD-lightgrey.svg?style=flat)](https://github.com/stefanodaccchille/fast-bookmark/blob/master/LICENSE)
 
 # fast-bookmark
 
@@ -23,3 +24,7 @@ the mocking to work, otherwise the tests will fail with an `java.lang.IllegalSta
 (SomeClass::class.java) must not be null`
 - when mocking a kotlin class it is necessary to create an interface and mock it instead of the
 implementation, otherwise the mocks won' work. Is there a better way to do this?
+
+# Pains
+- Make the app build on Travis CI:
+  - the `lintVital` task always failed with PermGen out of memory. The solution was to add this config line in the Travis yml file: `GRADLE_OPTS="$GRADLE_OPTS -XX:MaxPermSize=256m"`
